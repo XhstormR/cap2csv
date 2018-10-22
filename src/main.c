@@ -164,3 +164,8 @@ int main(int argc, char **argv) {
  * https://zh.m.wikipedia.org/zh-cn/传输控制协议#封包結構
  * https://en.m.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
  */
+
+/* VLAN
+ * https://en.m.wikipedia.org/wiki/IEEE_802.1Q
+ * https://github.com/the-tcpdump-group/tcpdump/blob/0906b438b66d6897804c0f03e201d6229326ac2b/addrtoname.c#L1304
+ */
