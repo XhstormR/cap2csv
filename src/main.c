@@ -30,13 +30,13 @@ void packet_handler(uint8_t *param, const struct pcap_pkthdr *header, const uint
 
     ether = (struct ether_header *) pkt_data;
 
-    ip = (struct ip *) (pkt_data + ETHER_HDRLEN);
-
+    ip = (struct ip *) ((uint8_t *) ether + ETHER_HDRLEN);
     ip_len = (uint32_t) (IP_HL(ip) * 4);
-    tcp = (struct tcphdr *) (pkt_data + ETHER_HDRLEN + ip_len);
 
+    tcp = (struct tcphdr *) ((uint8_t *) ip + ip_len);
     tcp_len = (uint32_t) (TH_OFF(tcp) * 4);
-    payload = (uint8_t *) (pkt_data + ETHER_HDRLEN + ip_len + tcp_len);
+
+    payload = (uint8_t *) tcp + tcp_len;
 
     /* convert from network byte order to host byte order */
     sport = EXTRACT_BE_U_2(tcp->th_sport);
@@ -110,7 +110,7 @@ int main(int argc, char **argv) {
     struct bpf_program fcode;
 
     if (argc < 3) {
-        fprintf(stderr, "Usage:\n%s .cap .csv\n", argv[0]);
+        fprintf(stderr, "Usage:\n%s <cap> <csv> [filter]\n", argv[0]);
         return -1;
     }
 
@@ -162,4 +162,5 @@ int main(int argc, char **argv) {
  * https://zh.m.wikipedia.org/zh-cn/IPv4#首部
  * https://zh.m.wikipedia.org/zh-cn/用户数据报协议#UDP的分组结构
  * https://zh.m.wikipedia.org/zh-cn/传输控制协议#封包結構
+ * https://en.m.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
  */
